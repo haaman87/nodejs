@@ -5,6 +5,9 @@ const REST_API_KEY = '7498f3c98f3527e975166e7eb3e56dd2';
 const REDIRECT_URI = 'https://lively-plant-0a998e000.3.azurestaticapps.net';
 const PORT = 8080;
 
+// 로그인 요청
+const authorizeUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
 const server = http.createServer((req, res) => {
   res.writeHead(302, {
     'Location': authorizeUrl
@@ -12,9 +15,11 @@ const server = http.createServer((req, res) => {
   res.end();
 });
 
-// 로그인 요청
-const authorizeUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+server.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
+});
 
+// 인가코드 받기
 axios.get(authorizeUrl)
   .then(response => {
     console.log(response.data);
@@ -22,7 +27,3 @@ axios.get(authorizeUrl)
   .catch(error => {
     console.error(error);
   });
-
-server.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
-});
